@@ -9,7 +9,7 @@
 import pandas as pd
 import numpy as np
 
-# read in and look at data from spreadsheet; N.B. "df" is short for "data frame"
+# read in and look at data from spreadsheet; N.B. "df" is short for "data frame" which is basically another name for tabular (spreadsheet) data
 
 df = pd.read_csv("testData.csv")
 
@@ -19,14 +19,15 @@ df.tail()
 
 df.loc[5]
 
-# remove unnecessary columns cluttering up dataset
+# remove unnecessary columns cluttering up your dataset then double-check to make sure they're gone
 
 to_drop = ['occur_min_date','occur_max_date','NumDocAppearances']
 df.drop(columns=to_drop, inplace=True) # or use df = df.drop(columns=to_drop)
 
 df.loc[5]
 
-# set dataset's unique identifiers as locator IDs within this program, note how it changes count of data types
+# set dataset's unique identifiers (ODNB IDs) as locator IDs within this program and note how it changes the count of data types
+# also notice the three different types of data: integers, strings, and "floats" aka numbers with decimal points
 
 df.get_dtype_counts()
 
@@ -39,7 +40,7 @@ df.loc[10000001]
 
 df.get_dtype_counts()
 
-# calculate statistics on number columns
+# calculate some basic statistics on the float/number columns
 
 number_columns = ['bio_length','bio_min_date','bio_max_date']
 
@@ -54,13 +55,17 @@ df[number_columns].mean()
 df.hist(column='bio_length')
 df[number_columns].hist()
 
-# filter rows without name information
+# identify null (blank) cells in your dataset and count them
 
 null_columns = df.columns[df.isnull().any()]
 df[null_columns].isnull().sum()
 
+# notice that isnull and notnull are inverses of each other
+
 df['full_name'].isnull() # or df.isnull()['full_name']
 df['full_name'].notnull()
+
+# identify rows without name information and remove them, then double-check to make sure they're gone
 
 df[df['full_name'].notnull()]
 df[df['full_name'].notnull()].tail()
@@ -68,7 +73,7 @@ df.tail()
 df = df[df['full_name'].notnull()]
 df.tail()
 
-# filter rows without birth AND death information
+# identify and remove rows without birth AND death information
 
 df['full_date'].head()
 
