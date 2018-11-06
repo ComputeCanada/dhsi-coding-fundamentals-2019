@@ -1,4 +1,5 @@
-# helpful example sites: https://realpython.com/python-data-cleaning-numpy-pandas/
+# helpful example sites: 
+# https://realpython.com/python-data-cleaning-numpy-pandas/
 # http://www.developintelligence.com/blog/2017/08/data-cleaning-pandas-python/
 # https://towardsdatascience.com/data-visualization-exploration-using-pandas-only-beginner-a0a52eb723d5
 
@@ -8,6 +9,7 @@
 
 import pandas as pd
 import numpy as np
+import re
 
 # read in and look at data from spreadsheet; N.B. "df" is short for "data frame" which is basically another name for tabular (spreadsheet) data
 
@@ -22,7 +24,7 @@ df.loc[5]
 # remove unnecessary columns cluttering up your dataset then double-check to make sure they're gone
 
 to_drop = ['occur_min_date','occur_max_date','NumDocAppearances']
-df.drop(columns=to_drop, inplace=True) # or use df = df.drop(columns=to_drop)
+df.drop(columns=to_drop, inplace=True) # or use df = df.drop(columns=to_drop) as either will replace the existing df with a version of df minus the dropped columns
 
 df.loc[5]
 
@@ -31,10 +33,10 @@ df.loc[5]
 
 df.get_dtype_counts()
 
-df['ODNB ID'].is_unique
-df.set_index('ODNB ID', inplace=True) # or use df = df.set_index('ODNB ID')
+df['ODNB ID'].is_unique # check to make sure that the ODNB ID is a unique identifier before setting as the locator ID / index for df
+df.set_index('ODNB ID', inplace=True) # or use df = df.set_index('ODNB ID') again either will replace the existing df with a new version
 
-# df.loc[5] # only do this in class to show that it now generates an error
+# df.loc[5] # only do this in class to show that it now generates an error because 5 is no longer a valid locator ID / index since it's not an ODNB ID
 df.head()
 df.loc[10000001]
 
@@ -50,7 +52,8 @@ df[number_columns].min()
 df[number_columns].median()
 df[number_columns].mean()
 
-# visualize is not working this is going to drive me bonkers will have to debug later
+# ***visualize is not working this is going to drive me bonkers will have to debug later
+# ***do I not have mathplotlib installed? definitely didn't import it here - note to self, try on work laptop
 
 df.hist(column='bio_length')
 df[number_columns].hist()
@@ -66,6 +69,7 @@ df['full_name'].isnull() # or df.isnull()['full_name']
 df['full_name'].notnull()
 
 # identify rows without name information and remove them, then double-check to make sure they're gone
+# ***some of this code is superfluous, decide which way is clearer to present to students
 
 df[df['full_name'].notnull()]
 df[df['full_name'].notnull()].tail()
@@ -78,22 +82,33 @@ df.tail()
 df['full_date'].head()
 
 full_date = df['full_date']
-birth_death = full_date.str.contains('-')
+birth_death = full_date.str.contains('-') # N.B. this will also eliminate the uncommon variant of a comma instead of a '-' separating dates
+                                            # ***this will silently substitute in a flourish date, might want to change code to prevent this?
 birth_death[:5]
 
 df['full_date'] = np.where(birth_death, full_date, None)
 
 df = df[df['full_date'].notnull()]
 
-# turn full date into death dates only and take average
+# add a new column of death dates only
 
-df['full_date'].str.split('-')
-split_date = df['full_date'].str.split('-')
+df['full_date'].str.split('-') # see what this split function does
+split_date = df['full_date'].str.split('-') # save the results into a new variable
+df['death_date'] = split_date.str[-1] # take the last date in the column and save it as a new 'death_date' column in the original dataframe
 
-# df['full_date'] = split_date[1] # this is wrong and needs to be fixed so that I replace the full date with just the death date, ideally also filtering for ?s, c., etc.
+# use split the same way we removed everything before the dash character to remove non-numeric characters from 'death_date'
 
-# df['full_date'] = pd.to_numeric(df['full_date'])
-# df['full_date'].mean()
+df['death_date']=df['death_date'].str.split(' ').str[-1] # removes everything before a space e.g. in the data instance of "d. 1610"
+df['death_date']=df['death_date'].str.split('.').str[-1] # removes everything before a period e.g. in the data instance of "d.1610"
+df['death_date']=df['death_date'].str.split('x').str[0] # removes everything after an x - note: this implies first death date in a range e.g. "1610x7" is a definitive death date
+df['death_date']=df['death_date'].str.split('/').str[0] # removes everything after an / - note: this implies initial death date in a split date e.g. "1610/1" is a definitive death date
+df['death_date']=df['death_date'].str.split('?').str[0] # removes everything after an ? - note: this implies an uncertain death date e.g. "1610?" is a definitive death date
+df['death_date']=df['death_date'].str.split('s').str[0] # removes everything after an s - note: this implies an uncertain death date e.g. "1610s" is a definitive death date
+
+# turn death dates into floats (numbers) and take average of death dates
+
+df['death_date'] = pd.to_numeric(df['death_date'])
+df['death_date'].mean() # note: how might the transformation of uncertain death dates (above) skew our results here?
 
 # export current dataset to csv
 
