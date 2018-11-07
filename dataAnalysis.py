@@ -9,7 +9,7 @@
 
 import pandas as pd
 import numpy as np
-import re
+import matplotlib.pyplot as plt
 
 # read in and look at data from spreadsheet; N.B. "df" is short for "data frame" which is basically another name for tabular (spreadsheet) data
 
@@ -52,11 +52,10 @@ df[number_columns].min()
 df[number_columns].median()
 df[number_columns].mean()
 
-# ***visualize is not working this is going to drive me bonkers will have to debug later
-# ***do I not have mathplotlib installed? definitely didn't import it here - note to self, try on work laptop
+# visualize the float/number columns as a histogram
 
-df.hist(column='bio_length')
 df[number_columns].hist()
+plt.show()
 
 # identify null (blank) cells in your dataset and count them
 
