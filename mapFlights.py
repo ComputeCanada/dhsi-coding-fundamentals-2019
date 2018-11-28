@@ -1,4 +1,6 @@
 # Google spreadsheet/map of hometowns and travel routes
+# instructions on how to do this with Sheets instead of a CSV: https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html
+# note: doing this with live Google API requires giving a credit card and being charged if go over the rate limit
 
 # import libraries needed for program
 
