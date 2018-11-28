@@ -9,6 +9,8 @@
 
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')  #forces the popup to the top
 import matplotlib.pyplot as plt
 
 # read in and look at data from spreadsheet; N.B. "df" is short for "data frame" which is basically another name for tabular (spreadsheet) data
