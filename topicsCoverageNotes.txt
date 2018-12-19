@@ -24,6 +24,7 @@ mapFlightsSheets.py
 - importing libraries
 - lists
 - while loops
+- strings vs. floats vs. integers
 
 -- creating API credentials, importing from Sheets
 
@@ -37,9 +38,7 @@ mediaReader.py
 NOT YEY COVERED
 
 - conditionals
-- while loops
 - except
-- discussion of floats vs. integers
 - create your own functions
 - dictionaries
 - tuples

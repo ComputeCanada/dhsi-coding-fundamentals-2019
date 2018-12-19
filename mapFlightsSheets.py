@@ -27,12 +27,9 @@ gmap = gmplot.GoogleMapPlotter(48.4634, -123.3117, 3)
 
 i = 0
 while i < len(latitude):
-	gmap.marker(latitude[i],longitude[i])
+	gmap.marker(float(latitude[i]),float(longitude[i]))
 	i = i+1
 
 # create map, save as map.html in the working directory
 
 gmap.draw('map.html')
-
-# close the files so we don't accidentally corrupt them or crash something
-placesFile.close()
