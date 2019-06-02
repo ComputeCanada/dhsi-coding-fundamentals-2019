@@ -87,7 +87,7 @@ birth_death = full_date.str.contains('-') # N.B. this will also eliminate the un
                                             # ***this will silently substitute in a flourish date, might want to change code to prevent this?
 birth_death[:5]
 
-df['full_date'] = np.where(birth_death, full_date, None)
+df['full_date'] = np.where(birth_death, full_date, None) #if birth_death is true, will give us full_date, otherwise gives us None/empty cell
 
 df = df[df['full_date'].notnull()]
 

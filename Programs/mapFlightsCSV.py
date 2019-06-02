@@ -7,7 +7,7 @@
 import gmplot
 import csv
 
-# open csv file of places and read in the latitudes/longitudes; originalDatesReader is a list of lists
+# open csv file of places and read in the latitudes/longitudes; placesReader is a list of lists, that is a list of paired coordinates [lat, long]
 
 placesFile = open("places.csv")
 placesReader = csv.reader(placesFile)
@@ -17,7 +17,7 @@ placesReader = csv.reader(placesFile)
 gmap = gmplot.GoogleMapPlotter(48.4634, -123.3117, 3)
 
 # create lists of latitudes and longitudes
-# we are looping through each list in placesReader
+# we are looping through each list [lat, long] in placesReader
 
 for location in placesReader:
 	gmap.marker(float(location[0]), float(location[1]))
