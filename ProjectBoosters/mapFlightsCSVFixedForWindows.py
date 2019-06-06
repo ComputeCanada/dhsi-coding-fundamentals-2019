@@ -27,9 +27,13 @@ gmap = gmplot.GoogleMapPlotter(48.4634, -123.3117, 3)
 # create lists of latitudes and longitudes
 # we are looping through each list [lat, long] in placesReader
 # we are also adding a TITLE that is the third column from the spreadsheet and includes human-readable names: this will be visible on hover-over
+# we are also adding a conditional statement to change the color of the marker if an (attribute) condition in a fourth column is satisfied
 
 for location in placesReader:
-	gmap.marker(float(location[0]), float(location[1]), title=location[2])
+    if location[3] == "AWESOME":
+        gmap.marker(float(location[0]), float(location[1]), 'cornflowerblue', title=location[2])
+    else:
+        gmap.marker(float(location[0]), float(location[1]), title=location[2])
 
 # create map, save as map.html in the working directory
 
