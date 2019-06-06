@@ -14,18 +14,29 @@ matplotlib.use('TkAgg')  #forces the popup to the top
 import matplotlib.pyplot as plt
 
 # read in and look at data from spreadsheet; N.B. "df" is short for "data frame" which is basically another name for tabular (spreadsheet) data
+# in other words, "df" is basically a list of lists
+# we use the . terminology to call a pre-built function from the library we imported
 
 df = pd.read_csv("testData.csv")
 
+# this is a function, it tells us information about "df"
+type(df)
+df
+
+# head, tail, loc, etc. are methods and also use the . terminology because they are acting on "df" and can change "df"
 df.head()
 df.head(10)
 df.tail()
 
 df.loc[5]
+df.loc[5][1]
 
 # remove unnecessary columns cluttering up your dataset then double-check to make sure they're gone
-
+# to_drop is a regular list - recognizable by square brackets - that contains three string objects
 to_drop = ['occur_min_date','occur_max_date','NumDocAppearances']
+to_drop
+type(to_drop)
+# here we see a method that alters df
 df.drop(columns=to_drop, inplace=True) # or use df = df.drop(columns=to_drop) as either will replace the existing df with a version of df minus the dropped columns
 
 df.loc[5]
@@ -60,7 +71,7 @@ df[number_columns].hist()
 plt.show()
 
 # identify null (blank) cells in your dataset and count them
-
+# note that I can "chain" together methods, add them on top of each other
 null_columns = df.columns[df.isnull().any()]
 df[null_columns].isnull().sum()
 
@@ -85,7 +96,7 @@ df['full_date'].head()
 full_date = df['full_date']
 birth_death = full_date.str.contains('-') # N.B. this will also eliminate the uncommon variant of a comma instead of a '-' separating dates
                                             # ***this will silently substitute in a flourish date, might want to change code to prevent this?
-birth_death[:5]
+birth_death[:5] #sneaky! strings are also lists!
 
 df['full_date'] = np.where(birth_death, full_date, None) #if birth_death is true, will give us full_date, otherwise gives us None/empty cell
 
