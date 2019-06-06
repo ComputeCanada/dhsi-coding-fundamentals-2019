@@ -6,6 +6,8 @@
 
 import gmplot
 import csv
+from sys import platform
+import re
 
 # open csv file of places and read in the latitudes/longitudes; placesReader is a list of lists, that is a list of paired coordinates [lat, long]
 
@@ -28,3 +30,10 @@ gmap.draw('map.html')
 
 # close the files so we don't accidentally corrupt them or crash something
 placesFile.close()
+
+# check to see if the machine running this is a windows machine - if it is, then use regular expressions to fix the backwards html slashes
+if platform == "win32" or platform == "cygwin" or platform == "msys":
+    with open('map.html','r') as originalMapFile:
+        with open('map-clean.html','w') as cleanMapFile:
+            for line in originalMapFile:
+                cleanMapFile.write(re.sub(r'\\','/',line)+'\n')
