@@ -1,0 +1,25 @@
+# this is a program to reformat free text data into a readable csv
+# it requires the "free text" to actually have consistent formatting that is known to the programmer
+# this program is tailored to deal with a .txt file in the following format
+
+Record 1 of 50
+CALL #       MF-14291.
+TITLE        The overseas Hindustan times [microform]
+IMPRINT      New Delhi : Hindustan Times Ltd., -1987.
+
+Record 2 of 50
+CALL #       MF.
+TITLE        The searchlight [microform]
+IMPRINT      Patna : The Behar Journals, Ltd., [1918-1986]
+
+import csv
+
+# open text file in read-only mode
+file = open("text.txt")
+contents = file.readlines()
+
+for line in contents:
+    print(line)
+
+# close the files so we don't accidentally corrupt them or crash something
+file.close()
