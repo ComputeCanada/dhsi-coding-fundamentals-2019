@@ -2,6 +2,10 @@
 # instructions on how to do this with Sheets instead of a CSV: https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html
 # note: doing the mapping part with live Google API requires giving a credit card and being charged if go over the rate limit
 
+# documentation for the gmplot library is here: https://github.com/vgm64/gmplot
+# additional options are here: https://www.geeksforgeeks.org/python-plotting-google-map-using-gmplot-package/
+
+
 # import libraries needed for program
 
 import gmplot
@@ -16,13 +20,16 @@ placesReader = csv.reader(placesFile)
 
 # create and center map on the University of Victoria, zoom level 3
 
+#gmap = gmplot.GoogleMapPlotter.from_geocode("San Francisco")
+
 gmap = gmplot.GoogleMapPlotter(48.4634, -123.3117, 3)
 
 # create lists of latitudes and longitudes
 # we are looping through each list [lat, long] in placesReader
+# we are also adding a TITLE that is the third column from the spreadsheet and includes human-readable names: this will be visible on hover-over
 
 for location in placesReader:
-	gmap.marker(float(location[0]), float(location[1]))
+	gmap.marker(float(location[0]), float(location[1]), title=location[2])
 
 # create map, save as map.html in the working directory
 
